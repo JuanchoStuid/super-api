@@ -1,36 +1,52 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import Header from "./components/Header";
+import "./style.css";
 
 function App() {
-
-  const [heroes, setHeroes] = useState([]);
+  const [heroe, setHeroes] = useState([]);
 
   useEffect(() => {
-    llamarNuestraApi();
-  }, [heroes])
-  
-  const llamarNuestraApi = async () => {
-    const respuesta = await fetch("http://localhost:4000/superheroes");
-    const datos = await respuesta.json();
-    console.log(datos);
-    setHeroes(datos);
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const response = await fetch("http://localhost:4000/superheroes");
+    const data = await response.json();
+    setHeroes(data);
+    console.log(data);
+  };
+
+  function ruta(e) {
+    if (e == "Marvel Comics") {
+      return "marvel.png";
+    } else {
+      return "dc.png";
+    }
   }
 
   return (
-    <div className="App">
-      <h1>Hola API</h1>
-      <div>
-        {heroes.map(heroe => (
-          <div key={heroe.id}>
-            <h2>{heroe.nombre}</h2>
-            <p>{heroe.editorial}</p>
-            <img src={heroe.imagen}></img>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+    <>
+      <Header />
+      <section className="container">
+        <div className="row">
+          {heroe.map((heroe) => (
+            <div className="card " key={heroe.id}>
+              <div className="conimg">
+                <img src={heroe.imagen} alt="imagen" />
+              </div>
+              <div className="card-body">
+                <h5>{heroe.nombre}</h5>
+                <p>{heroe.descripcion}</p>
+              </div>
+              <div className="imgdefault">
+                <img src={"src/" + ruta(heroe.editorial)} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
 }
 
-export default App
+export default App;
